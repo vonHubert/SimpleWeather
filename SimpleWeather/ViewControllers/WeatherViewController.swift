@@ -9,10 +9,10 @@ import UIKit
 
 class WeatherViewController: UIViewController {
     
-    
+    // MARK: IBOutlets
     @IBOutlet var cityPickerView: UIPickerView!
     
-    
+    // MARK: Properties
     let cityCoordinates = [
         "Moscow":[55.45, 37.36],
         "St.Petersburg":[59.56, 30.18],
@@ -23,11 +23,10 @@ class WeatherViewController: UIViewController {
     ]
     var cityNames: [String] = []
     var selectedCity = ""
-
     var requestLink = ""
-    var report: MainDataBlock?
+    var weather: MainDataBlock?
     
-    
+    // MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         cityPickerView.dataSource = self
@@ -35,19 +34,29 @@ class WeatherViewController: UIViewController {
         cityNames = cityCoordinates.keys.sorted()
     }
     
+    // MARK: IBActions
     @IBAction func requestWeatherTapped(_ sender: Any) {
         guard let coordinates = cityCoordinates[selectedCity] else { return }
         let longitude = coordinates[0]
         let latitude = coordinates[1]
         requestLink = generateRequestLink(longitude: longitude, latitude: latitude)
-        print(requestLink)
-//        fetchWeatherReport(requestLink: requestLink)
-//        //print(report)
+        fetchWeatherReport()
+        print(weather)
     }
     
-    private func generateRequestLink(longitude: Double, latitude: Double) -> String {
-        let reportType = "civillight"
-        return "https://www.7timer.info/bin/api.pl?lon=\(longitude)&lat=\(latitude)&product=\(reportType)&output=json"
+    // MARK: Methods
+    
+    private func fetchWeatherReport() {
+        NetworkManager.shared.fetchWeatherReport(from: requestLink) {[weak self] result in
+            switch result {
+            case .success(let report):
+                self?.weather = report
+                self?.successAlert()
+            case .failure(let error):
+                print(error)
+                self?.failedAlert()
+            }
+        }
     }
     
     private func successAlert() {
