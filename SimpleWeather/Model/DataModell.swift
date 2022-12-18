@@ -22,7 +22,10 @@ struct WeatherDataBlock: Decodable {
 struct MainDataBlock: Decodable {
     let product: String?
     let dataseries: [WeatherDataBlock]?
-    
 }
 
+struct City {
+    let name: String
+    let coordinates: [Double]
+}
 

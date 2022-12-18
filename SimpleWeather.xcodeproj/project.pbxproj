@@ -13,7 +13,8 @@
 		32C083B7294A50EE008D9EB6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32C083B5294A50EE008D9EB6 /* Main.storyboard */; };
 		32C083B9294A50F1008D9EB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 32C083B8294A50F1008D9EB6 /* Assets.xcassets */; };
 		32C083BC294A50F1008D9EB6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32C083BA294A50F1008D9EB6 /* LaunchScreen.storyboard */; };
-		32C083C7294A514F008D9EB6 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C083C6294A514F008D9EB6 /* WeatherData.swift */; };
+		32C083C7294A514F008D9EB6 /* DataModell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C083C6294A514F008D9EB6 /* DataModell.swift */; };
+		32C083CA294F6B9F008D9EB6 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C083C9294F6B9F008D9EB6 /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +26,8 @@
 		32C083B8294A50F1008D9EB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		32C083BB294A50F1008D9EB6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		32C083BD294A50F1008D9EB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		32C083C6294A514F008D9EB6 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
+		32C083C6294A514F008D9EB6 /* DataModell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModell.swift; sourceTree = "<group>"; };
+		32C083C9294F6B9F008D9EB6 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 		32C083AE294A50EE008D9EB6 /* SimpleWeather */ = {
 			isa = PBXGroup;
 			children = (
+				32C083CB294F6BBE008D9EB6 /* Services */,
 				32C083C8294A5179008D9EB6 /* Model */,
 				32C083C3294A50FC008D9EB6 /* App */,
 				32C083C4294A5105008D9EB6 /* ViewControllers */,
@@ -97,9 +100,17 @@
 		32C083C8294A5179008D9EB6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				32C083C6294A514F008D9EB6 /* WeatherData.swift */,
+				32C083C6294A514F008D9EB6 /* DataModell.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		32C083CB294F6BBE008D9EB6 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				32C083C9294F6B9F008D9EB6 /* NetworkManager.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -175,8 +186,9 @@
 			files = (
 				32C083B4294A50EE008D9EB6 /* WeatherViewController.swift in Sources */,
 				32C083B0294A50EE008D9EB6 /* AppDelegate.swift in Sources */,
+				32C083CA294F6B9F008D9EB6 /* NetworkManager.swift in Sources */,
 				32C083B2294A50EE008D9EB6 /* SceneDelegate.swift in Sources */,
-				32C083C7294A514F008D9EB6 /* WeatherData.swift in Sources */,
+				32C083C7294A514F008D9EB6 /* DataModell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,9 +350,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = SS.SimpleWeather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -366,9 +381,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = SS.SimpleWeather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
