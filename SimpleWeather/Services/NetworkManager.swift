@@ -1,15 +1,13 @@
-//
+
 //  NetworkManager.swift
 //  SimpleWeather
-//
-//  Created by MacBook Air 13 on 18.12.2022.
-//
+
 
 import Foundation
 
 func generateRequestLink(longitude: Double, latitude: Double) -> String {
     let reportType = "civillight"
-    return "https://www.7timer.info/bin/api.pl?lon=\(longitude)&lat=\(latitude)&product=\(reportType)&output=json"
+    return "https://www.7timer.info/bin/api.pl?lon=\(longitude)&lat=\(latitude)&product=\(reportType)&unit=Metric&output=json"
 }
 
 enum NetworkError: Error {

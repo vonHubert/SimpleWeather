@@ -1,56 +1,69 @@
-//
+
 //  ViewController.swift
 //  SimpleWeather
-//
-//  Created by MacBook Air 13 on 14.12.2022.
-//
+
 
 import UIKit
 
 class WeatherViewController: UIViewController {
     
     // MARK: IBOutlets
+    
     @IBOutlet var cityPickerView: UIPickerView!
     @IBOutlet var weatherTableView: UITableView!
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     
     // MARK: Properties
+    
     let cityCoordinates = [
         "Moscow":[55.45, 37.36],
         "St.Petersburg":[59.56, 30.18],
         "Klimovsk":[55.3591, 37.5210],
         "London":[51.5072, 0.1276],
         "Brussels":[50.8476, 4.3572],
-        "Samara":[53.2038, 50.1606]
+        "Samara":[53.2038, 50.1606],
+        "Tbilisi":[41.7151, 44.8271],
+        "Karaganda":[49.8047, 73.1094],
+        "Izmail":[45.3502, 28.8502],
+        "Tuapse":[44.0962, 39.0745],
+        "Paris":[48.8566, 2.3522],
+        "Geneva":[46.2044, 6.1432],
+        "Ashgabat":[37.9601, 58.3261]
     ]
     var cityNames: [String] = []
     var selectedCity = ""
     var requestLink = ""
     var weather: [WeatherDataBlock] = []
+    let dateFormatter = DateFormatter()
+
     
     // MARK: viewDidLoad
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         cityPickerView.dataSource = self
         cityPickerView.delegate = self
         weatherTableView.dataSource = self
+        dateFormatter.dateFormat = "MMM dd,yyyy"
         cityNames = cityCoordinates.keys.sorted()
+        selectedCity = cityNames[0]
         activityIndicator.isHidden = true
         activityIndicator.hidesWhenStopped = true
-        weatherTableView.rowHeight = 100
+
     }
     
     // MARK: IBActions
+    
     @IBAction func requestWeatherTapped(_ sender: Any) {
         guard let coordinates = cityCoordinates[selectedCity] else { return }
-        let longitude = coordinates[0]
-        let latitude = coordinates[1]
-        requestLink = generateRequestLink(longitude: 55.45, latitude: 37.36)
-    //    requestLink = generateRequestLink(longitude: longitude, latitude: latitude)
+        let latitude = coordinates[0]
+        let longitude = coordinates[1]
+
+    
+        requestLink = generateRequestLink(longitude: longitude, latitude: latitude)
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         fetchWeatherReport()
-        
     }
     
     // MARK: Methods
@@ -62,44 +75,13 @@ class WeatherViewController: UIViewController {
                 self?.weather = report.dataseries ?? []
                 self?.activityIndicator.stopAnimating()
                 self?.weatherTableView.reloadData()
-                print(self?.weather)
             case .failure(let error):
                 print(error)
             }
         }
     }
-    
-//    private func successAlert() {
-//        DispatchQueue.main.async {
-//            let alert = UIAlertController(
-//                title: "Request fulfilled",
-//                message: "Forecast data block is printed and labeled",
-//                preferredStyle: .alert
-//            )
-//
-//            let okAction = UIAlertAction(title: "OK", style: .default)
-//            alert.addAction(okAction)
-//            self.present(alert, animated: true)
-//        }
-//    }
-//
-//    private func failedAlert() {
-//        DispatchQueue.main.async {
-//            let alert = UIAlertController(
-//                title: "Request failed",
-//                message: "Error message is printed",
-//                preferredStyle: .alert
-//            )
-//
-//            let okAction = UIAlertAction(title: "OK", style: .default)
-//            alert.addAction(okAction)
-//            self.present(alert, animated: true)
-//        }
-//    }
-    
-    
-  
 }
+// MARK: City PickerView Ext.
 
 extension WeatherViewController:UIPickerViewDataSource, UIPickerViewDelegate {
 
@@ -118,6 +100,8 @@ extension WeatherViewController:UIPickerViewDataSource, UIPickerViewDelegate {
     }
 }
     
+// MARK: 7 days Weather TableView Ext.
+
 extension WeatherViewController:UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -132,9 +116,12 @@ extension WeatherViewController:UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "day", for: indexPath)
         let daysWeather = weather[indexPath.row]
         var content = cell.defaultContentConfiguration()
-        content.text = "\(daysWeather.date ?? Date.now)"
+        content.text = (daysWeather.date ?? Date.now).formatted(date: .numeric, time: .omitted)
         content.secondaryText = """
-
+    Weather: \(daysWeather.weather ?? "")
+    Minimum temp: \(daysWeather.temp2m?.min ?? 0) degrees
+    Maximum temp: \(daysWeather.temp2m?.max ?? 0) degrees
+    Wind: \(daysWeather.wind10m_max ?? 0) m/s
 """
         cell.contentConfiguration = content
         return cell
