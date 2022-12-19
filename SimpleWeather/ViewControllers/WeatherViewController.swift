@@ -75,6 +75,7 @@ class WeatherViewController: UIViewController {
                 self?.weather = report.dataseries ?? []
                 self?.activityIndicator.stopAnimating()
                 self?.weatherTableView.reloadData()
+                print(report)
             case .failure(let error):
                 print(error)
             }
@@ -115,14 +116,45 @@ extension WeatherViewController:UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "day", for: indexPath)
         let daysWeather = weather[indexPath.row]
+        var weatherName = ""
+        var weatherImageName = ""
+        
+        switch daysWeather.weather {
+        case "clear": weatherName = "Clear"
+        case "cloudy": weatherName =  "Cloudy (80-100%)"
+        case "mcloudy": weatherName = "Mild clouds (20-60%)"
+        case "pcloudy": weatherName = "More clouds (60-80%)"
+        case "rain": weatherName = "Rainy"
+        case "lightrain": weatherName = "Light rain"
+        case "snow": weatherName = "Snowfall"
+        case "ts": weatherName = "Thunderstorm"
+        case "tsrain": weatherName = "Thunderstorm with rain"
+        case .none: weatherName = ""
+        case .some(_): weatherName = ""
+        }
+        switch daysWeather.weather {
+        case "clear": weatherImageName = "about_two_clear"
+        case "cloudy": weatherImageName =  "about_two_cloudy"
+        case "mcloudy": weatherImageName = "about_two_pcloudy"
+        case "pcloudy": weatherImageName = "about_two_pcloudy"
+        case "rain": weatherImageName = "about_two_rain"
+        case "lightrain": weatherImageName = "about_two_rain"
+        case "snow": weatherImageName = "about_two_snow"
+        case "ts": weatherImageName = "about_two_ts"
+        case "tsrain": weatherImageName = "about_two_tsrain"
+        case .none: weatherImageName = ""
+        case .some(_): weatherImageName = ""
+        }
+        
         var content = cell.defaultContentConfiguration()
-        content.text = (daysWeather.date ?? Date.now).formatted(date: .numeric, time: .omitted)
+        content.text = "\(daysWeather.date ?? 0)"
         content.secondaryText = """
-    Weather: \(daysWeather.weather ?? "")
+    Weather: \(weatherName)
     Minimum temp: \(daysWeather.temp2m?.min ?? 0) degrees
     Maximum temp: \(daysWeather.temp2m?.max ?? 0) degrees
     Wind: \(daysWeather.wind10m_max ?? 0) m/s
 """
+        content.image = UIImage(named: weatherImageName)
         cell.contentConfiguration = content
         return cell
     }

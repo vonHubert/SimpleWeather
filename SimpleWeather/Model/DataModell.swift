@@ -7,21 +7,21 @@
 
 import Foundation
 
-struct TemperatureDataBlock: Decodable {
-    let max: Int?
-    let min: Int?
+struct MainDataBlock: Decodable {
+    let product: String?
+    let dataseries: [WeatherDataBlock]?
 }
 
 struct WeatherDataBlock: Decodable {
-    let date: Date?
+    let date: Int?
     let weather: String?
     let temp2m: TemperatureDataBlock?
     let wind10m_max: Int?
 }
 
-struct MainDataBlock: Decodable {
-    let product: String?
-    let dataseries: [WeatherDataBlock]?
+struct TemperatureDataBlock: Decodable {
+    let max: Int?
+    let min: Int?
 }
 
 struct City {
