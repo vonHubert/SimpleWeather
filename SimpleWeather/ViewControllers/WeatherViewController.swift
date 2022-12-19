@@ -28,7 +28,8 @@ class WeatherViewController: UIViewController {
         "Tuapse":[44.0962, 39.0745],
         "Paris":[48.8566, 2.3522],
         "Geneva":[46.2044, 6.1432],
-        "Ashgabat":[37.9601, 58.3261]
+        "Ashgabat":[58.3261, 37.9601],
+        "Yerevan":[40.17, 44.50]
     ]
     var cityNames: [String] = []
     var selectedCity = ""
@@ -127,31 +128,35 @@ extension WeatherViewController:UITableViewDataSource, UITableViewDelegate {
         case "rain": weatherName = "Rainy"
         case "lightrain": weatherName = "Light rain"
         case "snow": weatherName = "Snowfall"
+        case "lightsnow": weatherName = "Light snow"
         case "ts": weatherName = "Thunderstorm"
         case "tsrain": weatherName = "Thunderstorm with rain"
-        case .none: weatherName = ""
-        case .some(_): weatherName = ""
+        case "humid": weatherName =  "Cloudy (80-100%)"
+        case .none: weatherName = "none"
+        case .some(_): weatherName = "other"
         }
         switch daysWeather.weather {
         case "clear": weatherImageName = "about_two_clear"
         case "cloudy": weatherImageName =  "about_two_cloudy"
+        case "humid": weatherImageName =  "about_two_cloudy"
         case "mcloudy": weatherImageName = "about_two_pcloudy"
         case "pcloudy": weatherImageName = "about_two_pcloudy"
         case "rain": weatherImageName = "about_two_rain"
         case "lightrain": weatherImageName = "about_two_rain"
         case "snow": weatherImageName = "about_two_snow"
+        case "lightsnow": weatherImageName = "about_two_snow"
         case "ts": weatherImageName = "about_two_ts"
         case "tsrain": weatherImageName = "about_two_tsrain"
-        case .none: weatherImageName = ""
-        case .some(_): weatherImageName = ""
+        case .none: weatherImageName = "about_two_clear"
+        case .some(_): weatherImageName = "about_two_clear"
         }
         
         var content = cell.defaultContentConfiguration()
         content.text = "\(daysWeather.date ?? 0)"
         content.secondaryText = """
     Weather: \(weatherName)
-    Minimum temp: \(daysWeather.temp2m?.min ?? 0) degrees
-    Maximum temp: \(daysWeather.temp2m?.max ?? 0) degrees
+    Temperature at night: \(daysWeather.temp2m?.min ?? 0) degrees
+    Temperature at daylight: \(daysWeather.temp2m?.max ?? 0) degrees
     Wind: \(daysWeather.wind10m_max ?? 0) m/s
 """
         content.image = UIImage(named: weatherImageName)
