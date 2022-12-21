@@ -64,24 +64,28 @@ class WeatherViewController: UIViewController {
         requestLink = generateRequestLink(longitude: longitude, latitude: latitude)
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
-        fetchWeatherReport()
+        fetchWeatherReportAF()
     }
     
     // MARK: Methods
     
-    private func fetchWeatherReport() {
-        NetworkManager.shared.fetchWeatherReport(from: requestLink) {[weak self] result in
+
+    
+    private func fetchWeatherReportAF() {
+        NetworkManager.shared.fetchWeatherReportAF(from: requestLink) {[weak self] result in
             switch result {
             case .success(let report):
-                self?.weather = report.dataseries ?? []
+                self?.weather = report
                 self?.activityIndicator.stopAnimating()
                 self?.weatherTableView.reloadData()
-                print(report)
+               // print(report)
             case .failure(let error):
                 print(error)
             }
         }
     }
+    
+    
 }
 // MARK: City PickerView Ext.
 
@@ -105,21 +109,21 @@ extension WeatherViewController:UIPickerViewDataSource, UIPickerViewDelegate {
 // MARK: 7 days Weather TableView Ext.
 
 extension WeatherViewController:UITableViewDataSource, UITableViewDelegate {
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
        weather.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "day", for: indexPath)
         let daysWeather = weather[indexPath.row]
         var weatherName = ""
         var weatherImageName = ""
-        
+
         switch daysWeather.weather {
         case "clear": weatherName = "Clear"
         case "cloudy": weatherName =  "Cloudy (80-100%)"
@@ -131,9 +135,7 @@ extension WeatherViewController:UITableViewDataSource, UITableViewDelegate {
         case "lightsnow": weatherName = "Light snow"
         case "ts": weatherName = "Thunderstorm"
         case "tsrain": weatherName = "Thunderstorm with rain"
-        case "humid": weatherName =  "Cloudy (80-100%)"
-        case .none: weatherName = "none"
-        case .some(_): weatherName = "other"
+        default: weatherName =  "Cloudy (80-100%)"
         }
         switch daysWeather.weather {
         case "clear": weatherImageName = "about_two_clear"
@@ -146,18 +148,16 @@ extension WeatherViewController:UITableViewDataSource, UITableViewDelegate {
         case "snow": weatherImageName = "about_two_snow"
         case "lightsnow": weatherImageName = "about_two_snow"
         case "ts": weatherImageName = "about_two_ts"
-        case "tsrain": weatherImageName = "about_two_tsrain"
-        case .none: weatherImageName = "about_two_clear"
-        case .some(_): weatherImageName = "about_two_clear"
+        default: weatherImageName = "about_two_tsrain"
         }
-        
+
         var content = cell.defaultContentConfiguration()
-        content.text = "\(daysWeather.date ?? 0)"
+        content.text = "\(daysWeather.date)"
         content.secondaryText = """
     Weather: \(weatherName)
-    Temperature at night: \(daysWeather.temp2m?.min ?? 0) degrees
-    Temperature at daylight: \(daysWeather.temp2m?.max ?? 0) degrees
-    Wind: \(daysWeather.wind10m_max ?? 0) m/s
+    Temperature at night: \(daysWeather.temp2m.min) degrees
+    Temperature at daylight: \(daysWeather.temp2m.max) degrees
+    Wind: \(daysWeather.wind10mMax) m/s
 """
         content.image = UIImage(named: weatherImageName)
         cell.contentConfiguration = content
