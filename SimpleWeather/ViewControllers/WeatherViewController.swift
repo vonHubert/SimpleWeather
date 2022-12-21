@@ -155,8 +155,8 @@ extension WeatherViewController:UITableViewDataSource, UITableViewDelegate {
         content.text = "\(daysWeather.date)"
         content.secondaryText = """
     Weather: \(weatherName)
-    Temperature at night: \(daysWeather.temp2m.min) degrees
-    Temperature at daylight: \(daysWeather.temp2m.max) degrees
+    Temperature at night: \(daysWeather.temp2m["min"] ?? 0) degrees
+    Temperature at daylight: \(daysWeather.temp2m["max"] ?? 0) degrees
     Wind: \(daysWeather.wind10mMax) m/s
 """
         content.image = UIImage(named: weatherImageName)
